@@ -8,31 +8,62 @@ LifeVault GitHub Actions をスマホからワンタップで操作するPWAダ�
 
 ### 1. GitHub Fine-grained PAT を作成
 
-https://github.com/settings/personal-access-tokens/new を開き、以下を設定する。
+#### 1-1. トークン作成ページを開く
 
-| 項目 | 値 |
-|------|-----|
-| Token name | `LV-Dash` |
-| Expiration | 90 days（推奨） |
-| Repository access | **Only select repositories** → `LifeVault` のみ |
+PCまたはスマホのブラウザで以下にアクセスする。
 
-**Permissions（3つ）**:
+https://github.com/settings/personal-access-tokens/new
 
-| Permission | Access |
+（GitHub にログイン済みであること。未ログインの場合はログイン後にリダイレクトされる）
+
+#### 1-2. 基本情報を入力
+
+| 項目 | 入力値 |
+|------|--------|
+| **Token name** | `LV-Dash`（任意の名前でOK） |
+| **Expiration** | `90 days` を推奨（最大1年まで選択可能） |
+| **Description** | 空欄でOK |
+
+#### 1-3. リポジトリアクセスを設定
+
+1. **Repository access** で **「Only select repositories」** を選択
+2. ドロップダウンから **`LifeVault`** を検索して選択
+3. LifeVault だけが選ばれていることを確認
+
+#### 1-4. Permissions（権限）を設定
+
+「Repository permissions」セクションを展開し、以下の3つだけを設定する。他はすべて「No access」のままにする。
+
+| Permission | 設定値 |
 |-----------|--------|
-| **Actions** | Read and write |
-| **Contents** | Read-only |
-| **Metadata** | Read-only |
+| **Actions** | **Read and write** |
+| **Contents** | **Read-only** |
+| **Metadata** | **Read-only**（自動で付与される場合あり） |
 
-**Generate token** をクリックし、`github_pat_...` をコピーする。
+#### 1-5. トークンを発行・コピー
+
+1. ページ下部の **「Generate token」** をクリック
+2. `github_pat_` で始まるトークン文字列が表示される
+3. **「コピー」ボタン（📋）をクリック**してクリップボードにコピー
+
+> このページを閉じるとトークンは二度と表示されない。コピーし忘れた場合は削除して再作成する。
 
 ### 2. LV Dash にPATを登録
 
-1. スマホで https://hcstnb2047.github.io/LV-Dash/ を開く
-2. **「PATを設定して始める」** をタップ
-3. コピーしたPATをペースト
+#### スマホで設定する場合（推奨）
+
+1. iPhone Safari で https://hcstnb2047.github.io/LV-Dash/ を開く
+2. ウェルカム画面の **「PATを設定して始める」** をタップ
+3. テキスト入力欄をタップし、**ペースト**（長押し→「ペースト」）でPATを貼り付ける
 4. **「検証して保存」** をタップ
-5. ワークフロー一覧が表示されたら完了
+5. 「PAT設定完了」のトーストが出て、ワークフロー一覧が表示されたらセットアップ完了
+
+#### PCで設定した後にスマホへ引き継ぐ場合
+
+PATはブラウザのlocalStorageに暗号化保存される（端末ごとに異なるキー）。
+PCとスマホで共有はされないため、**スマホでも同じPATを入力する必要がある**。
+
+手順: メモアプリやパスワードマネージャーにPATを一時保存 → スマホの LV Dash でペースト → 一時保存を削除
 
 ### 3. ホーム画面に追加（PWA）
 
