@@ -10,7 +10,7 @@ export function ToastContainer() {
         <div
           key={t.id}
           onClick={() => dismissToast(t.id)}
-          className={`w-full max-w-sm rounded-lg px-4 py-3 text-sm font-medium shadow-lg cursor-pointer transition-all animate-[slideDown_0.2s_ease-out] ${
+          className={`w-full max-w-sm rounded-lg px-4 py-3 text-sm font-medium shadow-lg cursor-pointer transition-all animate-[slideDown_0.2s_ease-out] break-words overflow-hidden ${
             t.type === 'success'
               ? 'bg-green-600 text-white'
               : t.type === 'error'

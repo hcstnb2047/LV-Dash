@@ -39,12 +39,12 @@ export function DispatchDialog({ wf, onClose }: Props) {
   const displayName = wf.meta?.displayName ?? wf.workflow.name
 
   return (
-    <div className="fixed inset-0 z-40 flex items-end sm:items-center justify-center bg-black/50" onClick={onClose}>
+    <div className="fixed inset-0 z-40 flex items-end sm:items-center justify-center bg-black/50 px-4" onClick={onClose}>
       <div
-        className="w-full max-w-md rounded-t-2xl sm:rounded-2xl bg-white dark:bg-gray-900 p-6 shadow-xl"
+        className="w-full max-w-md rounded-t-2xl sm:rounded-2xl bg-white dark:bg-gray-900 p-6 shadow-xl max-h-[85vh] overflow-y-auto overflow-x-hidden"
         onClick={(e) => e.stopPropagation()}
       >
-        <h2 className="text-lg font-bold mb-4">
+        <h2 className="text-lg font-bold mb-4 break-words">
           {inputs.length === 0 ? `「${displayName}」を実行しますか？` : `${displayName} を実行`}
         </h2>
 
@@ -142,16 +142,16 @@ function InputField({
 
   return (
     <div>
-      <label className="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">
+      <label className="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300 break-words">
         {label}
-        {input.description && <span className="ml-1 text-xs text-gray-400">({input.description})</span>}
+        {input.description && <span className="ml-1 text-xs text-gray-400 break-words">({input.description})</span>}
       </label>
-      <input
-        type="text"
+      <textarea
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={input.default || input.description || ''}
-        className="w-full rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 px-3 py-2 text-sm"
+        rows={2}
+        className="w-full rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 px-3 py-2 text-sm resize-none"
       />
     </div>
   )

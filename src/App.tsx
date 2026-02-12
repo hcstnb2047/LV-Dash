@@ -6,6 +6,8 @@ import { ActionsPage } from './pages/ActionsPage'
 import { SettingsPage } from './pages/SettingsPage'
 import { WelcomePage } from './pages/WelcomePage'
 import { PlaceholderPage } from './pages/PlaceholderPage'
+import { KnowledgePage } from './pages/KnowledgePage'
+import { KnowledgeViewPage } from './pages/KnowledgeViewPage'
 
 function AppRoutes() {
   const { pat, patLoading } = useApp()
@@ -22,7 +24,8 @@ function AppRoutes() {
     <>
       <Routes>
         <Route path="/" element={pat ? <ActionsPage /> : <WelcomePage />} />
-        <Route path="/knowledge" element={<PlaceholderPage title="Knowledge" />} />
+        <Route path="/knowledge" element={<KnowledgePage />} />
+        <Route path="/knowledge/view" element={<KnowledgeViewPage />} />
         <Route path="/dashboard" element={<PlaceholderPage title="Dashboard" />} />
         <Route path="/settings" element={<SettingsPage />} />
         <Route path="*" element={<Navigate to="/" replace />} />

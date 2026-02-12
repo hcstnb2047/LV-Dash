@@ -1,8 +1,8 @@
 import type { Workflow, WorkflowRun } from '../types'
 
-const OWNER = 'hcstnb2047'
-const REPO = 'LifeVault'
-const BASE = 'https://api.github.com'
+export const OWNER = 'hcstnb2047'
+export const REPO = 'LifeVault'
+export const BASE = 'https://api.github.com'
 
 export class GitHubAPIError extends Error {
   status: number
@@ -13,7 +13,7 @@ export class GitHubAPIError extends Error {
   }
 }
 
-async function request<T>(
+export async function request<T>(
   path: string,
   pat: string,
   options?: RequestInit,
