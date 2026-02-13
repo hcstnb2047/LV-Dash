@@ -18,7 +18,7 @@ function categorizeFile(path: string): KnowledgeCategory | null {
 }
 
 function parseDateFromFilename(filename: string): string | null {
-  const match = filename.match(/^(\d{4}-\d{2}-\d{2})/)
+  const match = filename.match(/^(\d{4}-\d{2}-\d{2})\.md$/)
   return match ? match[1] : null
 }
 
