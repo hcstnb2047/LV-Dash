@@ -5,7 +5,7 @@ import { ToastContainer } from './components/Toast'
 import { ActionsPage } from './pages/ActionsPage'
 import { SettingsPage } from './pages/SettingsPage'
 import { WelcomePage } from './pages/WelcomePage'
-import { PlaceholderPage } from './pages/PlaceholderPage'
+import { BookLibraryPage } from './pages/BookLibraryPage'
 import { KnowledgePage } from './pages/KnowledgePage'
 import { KnowledgeViewPage } from './pages/KnowledgeViewPage'
 
@@ -26,7 +26,7 @@ function AppRoutes() {
         <Route path="/" element={pat ? <ActionsPage /> : <WelcomePage />} />
         <Route path="/knowledge" element={<KnowledgePage />} />
         <Route path="/knowledge/view" element={<KnowledgeViewPage />} />
-        <Route path="/dashboard" element={<PlaceholderPage title="Dashboard" />} />
+        <Route path="/books" element={<BookLibraryPage />} />
         <Route path="/settings" element={<SettingsPage />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
