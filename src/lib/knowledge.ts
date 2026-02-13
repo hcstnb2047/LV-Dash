@@ -9,9 +9,11 @@ import type {
 } from '../types/knowledge'
 
 function categorizeFile(path: string): KnowledgeCategory | null {
-  if (path.startsWith('Knowledge/Research/')) return 'research'
-  if (path.startsWith('Knowledge/Notes/')) return 'notes'
-  if (path.startsWith('Knowledge/WebClips/')) return 'webclips'
+  if (path.startsWith('Knowledge/Research/')) return 'report'
+  if (path.startsWith('Knowledge/Books/')) return 'book'
+  if (path.startsWith('Knowledge/Notes/')) return 'note'
+  if (path.startsWith('Knowledge/Topics/')) return 'topic'
+  if (path.startsWith('Knowledge/WebClips/')) return 'webclip'
   return null
 }
 

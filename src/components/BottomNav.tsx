@@ -20,14 +20,19 @@ export function BottomNav() {
             <button
               key={tab.path}
               onClick={() => navigate(tab.path)}
-              className={`flex-1 flex flex-col items-center py-2 text-xs font-medium transition-colors ${
+              className={`relative flex-1 flex flex-col items-center py-2 text-xs font-medium transition-all ${
                 active
-                  ? 'text-blue-600 dark:text-blue-400'
-                  : 'text-gray-500 dark:text-gray-400'
+                  ? 'text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/30'
+                  : 'text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800/50'
               }`}
             >
-              <span className="text-lg mb-0.5">{tab.icon}</span>
-              {tab.label}
+              {active && (
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-12 h-1 bg-blue-600 dark:bg-blue-400 rounded-b-full" />
+              )}
+              <span className={`text-lg mb-0.5 transition-transform ${active ? 'scale-110' : ''}`}>
+                {tab.icon}
+              </span>
+              <span className={active ? 'font-bold' : ''}>{tab.label}</span>
             </button>
           )
         })}
