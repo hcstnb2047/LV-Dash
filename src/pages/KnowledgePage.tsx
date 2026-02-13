@@ -37,6 +37,15 @@ function SearchResultCard({ result }: { result: KnowledgeSearchResult }) {
   )
 }
 
+type SortKey = 'date-desc' | 'date-asc' | 'name-asc' | 'name-desc'
+
+const SORT_OPTIONS: { key: SortKey; label: string; icon: string }[] = [
+  { key: 'date-desc', label: '新しい順', icon: '📅↓' },
+  { key: 'date-asc', label: '古い順', icon: '📅↑' },
+  { key: 'name-asc', label: '名前順 (A→Z)', icon: '🔤↑' },
+  { key: 'name-desc', label: '名前順 (Z→A)', icon: '🔤↓' },
+]
+
 export function KnowledgePage() {
   const { pat, addToast } = useApp()
   const { files, loading, error, refresh } = useKnowledge(pat)
@@ -44,6 +53,8 @@ export function KnowledgePage() {
     useKnowledgeSearch(pat)
   const [filter, setFilter] = useState<KnowledgeFilterKey>('all')
   const [showSearch, setShowSearch] = useState(false)
+  const [sortKey, setSortKey] = useState<SortKey>('date-desc')
+  const [showSortMenu, setShowSortMenu] = useState(false)
 
   if (!pat) return null
 
@@ -52,9 +63,28 @@ export function KnowledgePage() {
   }
 
   const isSearching = query.length >= 2
-  const filteredFiles = files.filter(
-    (f) => filter === 'all' || f.category === filter,
-  )
+  const filteredFiles = files
+    .filter((f) => filter === 'all' || f.category === filter)
+    .sort((a, b) => {
+      switch (sortKey) {
+        case 'date-desc':
+          if (a.date && b.date) return b.date.localeCompare(a.date)
+          if (a.date && !b.date) return -1
+          if (!a.date && b.date) return 1
+          return a.displayName.localeCompare(b.displayName)
+        case 'date-asc':
+          if (a.date && b.date) return a.date.localeCompare(b.date)
+          if (a.date && !b.date) return 1
+          if (!a.date && b.date) return -1
+          return a.displayName.localeCompare(b.displayName)
+        case 'name-asc':
+          return a.displayName.localeCompare(b.displayName)
+        case 'name-desc':
+          return b.displayName.localeCompare(a.displayName)
+        default:
+          return 0
+      }
+    })
 
   return (
     <div className="flex-1 flex flex-col">
@@ -85,6 +115,49 @@ export function KnowledgePage() {
                 />
               </svg>
             </button>
+            <div className="relative">
+              <button
+                onClick={() => setShowSortMenu((s) => !s)}
+                className="rounded-lg p-2 text-gray-500 hover:bg-gray-200 dark:hover:bg-gray-800"
+                aria-label="ソート"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-5 w-5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12"
+                  />
+                </svg>
+              </button>
+              {showSortMenu && (
+                <div className="absolute right-0 mt-1 w-48 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 shadow-lg z-20">
+                  {SORT_OPTIONS.map((option) => (
+                    <button
+                      key={option.key}
+                      onClick={() => {
+                        setSortKey(option.key)
+                        setShowSortMenu(false)
+                      }}
+                      className={`w-full text-left px-4 py-3 text-sm flex items-center gap-2 transition-colors ${
+                        sortKey === option.key
+                          ? 'bg-blue-50 dark:bg-blue-950/30 text-blue-600 dark:text-blue-400 font-semibold'
+                          : 'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800'
+                      } ${option.key === SORT_OPTIONS[0].key ? 'rounded-t-xl' : ''} ${option.key === SORT_OPTIONS[SORT_OPTIONS.length - 1].key ? 'rounded-b-xl' : ''}`}
+                    >
+                      <span className="text-base">{option.icon}</span>
+                      <span>{option.label}</span>
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
             <button
               onClick={refresh}
               disabled={loading}
