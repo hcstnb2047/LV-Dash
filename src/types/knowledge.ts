@@ -1,10 +1,12 @@
-export type KnowledgeCategory = 'research' | 'notes' | 'webclips'
+export type KnowledgeCategory = 'report' | 'book' | 'note' | 'topic' | 'webclip'
 
 export const KNOWLEDGE_CATEGORY_LABELS: Record<KnowledgeCategory | 'all', string> = {
   all: '全て',
-  research: 'Research',
-  notes: 'Notes',
-  webclips: 'WebClips',
+  report: 'レポート',
+  book: 'ブック',
+  note: 'ノート',
+  topic: 'トピック',
+  webclip: 'ウェブクリップ',
 }
 
 export interface KnowledgeFile {

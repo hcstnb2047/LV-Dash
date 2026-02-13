@@ -1,10 +1,13 @@
 import { useNavigate } from 'react-router-dom'
 import type { KnowledgeFile, KnowledgeCategory } from '../types/knowledge'
+import { KNOWLEDGE_CATEGORY_LABELS } from '../types/knowledge'
 
 const CATEGORY_COLORS: Record<KnowledgeCategory, string> = {
-  research: 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200',
-  notes: 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200',
-  webclips: 'bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200',
+  report: 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200',
+  book: 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200',
+  note: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200',
+  topic: 'bg-cyan-100 text-cyan-800 dark:bg-cyan-900 dark:text-cyan-200',
+  webclip: 'bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200',
 }
 
 interface Props {
@@ -26,16 +29,21 @@ export function KnowledgeFileCard({ file }: Props) {
           <p className="text-sm font-medium text-gray-900 dark:text-gray-100 truncate">
             {file.displayName}
           </p>
-          <div className="flex items-center gap-2 mt-1">
+          <div className="flex items-center gap-2 mt-1 flex-wrap">
             <span
               className={`inline-block rounded-full px-2 py-0.5 text-[10px] font-medium ${CATEGORY_COLORS[file.category]}`}
             >
-              {file.category}
+              {KNOWLEDGE_CATEGORY_LABELS[file.category]}
             </span>
             {file.date && (
-              <span className="text-[11px] text-gray-500 dark:text-gray-400">
-                {file.date}
-              </span>
+              <>
+                <span className="inline-block rounded-full bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200 px-2 py-0.5 text-[10px] font-medium">
+                  日次生成
+                </span>
+                <span className="text-[11px] text-gray-500 dark:text-gray-400">
+                  {file.date}
+                </span>
+              </>
             )}
           </div>
         </div>

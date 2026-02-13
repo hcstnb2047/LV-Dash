@@ -9,14 +9,16 @@ import type {
 } from '../types/knowledge'
 
 function categorizeFile(path: string): KnowledgeCategory | null {
-  if (path.startsWith('Knowledge/Research/')) return 'research'
-  if (path.startsWith('Knowledge/Notes/')) return 'notes'
-  if (path.startsWith('Knowledge/WebClips/')) return 'webclips'
+  if (path.startsWith('Knowledge/Research/')) return 'report'
+  if (path.startsWith('Knowledge/Books/')) return 'book'
+  if (path.startsWith('Knowledge/Notes/')) return 'note'
+  if (path.startsWith('Knowledge/Topics/')) return 'topic'
+  if (path.startsWith('Knowledge/WebClips/')) return 'webclip'
   return null
 }
 
 function parseDateFromFilename(filename: string): string | null {
-  const match = filename.match(/^(\d{4}-\d{2}-\d{2})/)
+  const match = filename.match(/^(\d{4}-\d{2}-\d{2})\.md$/)
   return match ? match[1] : null
 }
 
