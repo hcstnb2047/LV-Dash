@@ -1,4 +1,4 @@
-import { request, OWNER, REPO, BASE } from './github'
+import { request, OWNER, DATA_REPO as REPO, BASE } from './github'
 import type {
   GitTreeResponse,
   GitContentResponse,

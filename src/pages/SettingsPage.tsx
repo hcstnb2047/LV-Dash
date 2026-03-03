@@ -47,7 +47,7 @@ export function SettingsPage() {
                 <br />
                 スコープ: Actions (R/W) + Contents (RO) + Metadata (RO)
                 <br />
-                リポジトリ: LifeVault のみ
+                リポジトリ: life-claude（Actions）/ life-data（Knowledge）
               </p>
               <input
                 type="password"

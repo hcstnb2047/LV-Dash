@@ -14,7 +14,7 @@ export default defineConfig({
       manifest: {
         name: 'LV Dash',
         short_name: 'LV Dash',
-        description: 'LifeVault GitHub Actions Dashboard',
+        description: 'life-claude / life-data Actions Dashboard',
         theme_color: '#0f172a',
         background_color: '#0f172a',
         display: 'standalone',

@@ -1,7 +1,8 @@
 import type { Workflow, WorkflowRun } from '../types'
 
 export const OWNER = 'hcstnb2047'
-export const REPO = 'LifeVault'
+export const REPO = 'life-claude'      // GitHub Actions ワークフロー
+export const DATA_REPO = 'life-data'   // Knowledge データ
 export const BASE = 'https://api.github.com'
 
 export class GitHubAPIError extends Error {

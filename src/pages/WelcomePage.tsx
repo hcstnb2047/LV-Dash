@@ -8,7 +8,7 @@ export function WelcomePage() {
       <div className="text-4xl mb-4">⚡</div>
       <h1 className="text-2xl font-bold mb-2">LV Dash</h1>
       <p className="text-sm text-gray-500 dark:text-gray-400 mb-8 max-w-xs">
-        LifeVault GitHub Actions をスマホからワンタップで操作
+        life-claude GitHub Actions をスマホからワンタップで操作
       </p>
       <button
         onClick={() => navigate('/settings')}
