@@ -1,8 +1,8 @@
-import type { WorkflowWithMeta } from '../types'
+import type { WorkflowState } from '../types'
 import { CATEGORY_LABELS } from '../types'
 
 interface Props {
-  workflows: WorkflowWithMeta[]
+  workflows: WorkflowState[]
 }
 
 export function WorkflowStats({ workflows }: Props) {
