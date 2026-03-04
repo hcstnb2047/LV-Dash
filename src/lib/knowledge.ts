@@ -29,8 +29,13 @@ function getDisplayName(filename: string): string {
 }
 
 export async function getKnowledgeTree(pat: string): Promise<KnowledgeFile[]> {
+  const branch = await request<{ commit: { commit: { tree: { sha: string } } } }>(
+    `/repos/${OWNER}/${REPO}/branches/main`,
+    pat,
+  )
+  const treeSha = branch.commit.commit.tree.sha
   const data = await request<GitTreeResponse>(
-    `/repos/${OWNER}/${REPO}/git/trees/main?recursive=1`,
+    `/repos/${OWNER}/${REPO}/git/trees/${treeSha}?recursive=1`,
     pat,
   )
 
