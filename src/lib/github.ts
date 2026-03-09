@@ -1,8 +1,5 @@
-import type { Workflow, WorkflowRun } from '../types'
-
 export const OWNER = 'hcstnb2047'
-export const REPO = 'life-claude'      // GitHub Actions ワークフロー
-export const DATA_REPO = 'life-data'   // Knowledge データ
+export const DATA_REPO = 'life-data'
 export const BASE = 'https://api.github.com'
 
 export class GitHubAPIError extends Error {
@@ -44,59 +41,4 @@ export async function validatePAT(pat: string): Promise<boolean> {
   } catch {
     return false
   }
-}
-
-export async function listWorkflows(pat: string): Promise<Workflow[]> {
-  const data = await request<{ workflows: Workflow[] }>(
-    `/repos/${OWNER}/${REPO}/actions/workflows?per_page=50`,
-    pat,
-  )
-  return data.workflows.filter(
-    (w) => w.state === 'active' || w.state === 'disabled_manually',
-  )
-}
-
-export async function getWorkflowRuns(
-  pat: string,
-  workflowId: number,
-  count = 3,
-): Promise<WorkflowRun[]> {
-  const data = await request<{ workflow_runs: WorkflowRun[] }>(
-    `/repos/${OWNER}/${REPO}/actions/workflows/${workflowId}/runs?per_page=${count}`,
-    pat,
-  )
-  return data.workflow_runs
-}
-
-export async function dispatchWorkflow(
-  pat: string,
-  workflowId: string,
-  inputs: Record<string, string> = {},
-): Promise<void> {
-  await request(
-    `/repos/${OWNER}/${REPO}/actions/workflows/${workflowId}/dispatches`,
-    pat,
-    {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ ref: 'main', inputs }),
-    },
-  )
-}
-
-export async function getLatestRunAfterDispatch(
-  pat: string,
-  workflowId: number,
-  dispatchedAt: Date,
-  maxRetries = 3,
-): Promise<WorkflowRun | null> {
-  for (let i = 0; i < maxRetries; i++) {
-    await new Promise((r) => setTimeout(r, 2000))
-    const runs = await getWorkflowRuns(pat, workflowId, 1)
-    if (runs.length > 0) {
-      const run = runs[0]
-      if (new Date(run.created_at) >= dispatchedAt) return run
-    }
-  }
-  return null
 }

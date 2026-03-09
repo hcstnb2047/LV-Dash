@@ -3,7 +3,7 @@ import { useSearchParams, useNavigate } from 'react-router-dom'
 import { useApp } from '../context/AppContext'
 import { getFileContent } from '../lib/knowledge'
 import { MarkdownContent } from '../components/MarkdownContent'
-import { OWNER, REPO } from '../lib/github'
+import { OWNER, DATA_REPO } from '../lib/github'
 
 // Simple in-memory content cache (survives SPA navigation)
 const contentCache = new Map<string, string>()
@@ -65,14 +65,14 @@ export function KnowledgeViewPage() {
   if (!pat || !path) return null
 
   const title = getDisplayTitle(path)
-  const githubUrl = `https://github.com/${OWNER}/${REPO}/blob/main/${path}`
+  const githubUrl = `https://github.com/${OWNER}/${DATA_REPO}/blob/main/${path}`
 
   return (
     <div className="flex-1 flex flex-col">
       <header className="sticky top-0 z-10 bg-gray-50/80 dark:bg-gray-950/80 backdrop-blur-sm border-b border-gray-200 dark:border-gray-800 px-4 py-3">
         <div className="flex items-center gap-2">
           <button
-            onClick={() => navigate('/knowledge')}
+            onClick={() => navigate('/')}
             className="rounded-lg p-2 text-gray-500 hover:bg-gray-200 dark:hover:bg-gray-800 shrink-0"
             aria-label="戻る"
           >

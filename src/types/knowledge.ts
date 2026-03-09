@@ -1,9 +1,8 @@
-export type KnowledgeCategory = 'report' | 'book' | 'note' | 'topic' | 'webclip'
+export type KnowledgeCategory = 'report' | 'note' | 'topic' | 'webclip'
 
 export const KNOWLEDGE_CATEGORY_LABELS: Record<KnowledgeCategory | 'all', string> = {
   all: '全て',
   report: 'レポート',
-  book: 'ブック',
   note: 'ノート',
   topic: 'トピック',
   webclip: 'ウェブクリップ',

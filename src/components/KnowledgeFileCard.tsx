@@ -1,20 +1,22 @@
 import { useNavigate } from 'react-router-dom'
 import type { KnowledgeFile, KnowledgeCategory } from '../types/knowledge'
 import { KNOWLEDGE_CATEGORY_LABELS } from '../types/knowledge'
+import type { RetentionLevel } from '../types/srs'
+import { RetentionBadge } from './RetentionBadge'
 
 const CATEGORY_COLORS: Record<KnowledgeCategory, string> = {
-  report: 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200',
-  book: 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200',
-  note: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200',
-  topic: 'bg-cyan-100 text-cyan-800 dark:bg-cyan-900 dark:text-cyan-200',
-  webclip: 'bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200',
+  report: 'text-purple-400 border-purple-800',
+  note: 'text-amber-400 border-amber-800',
+  topic: 'text-sky-400 border-sky-800',
+  webclip: 'text-zinc-400 border-zinc-700',
 }
 
 interface Props {
   file: KnowledgeFile
+  retentionLevel?: RetentionLevel
 }
 
-export function KnowledgeFileCard({ file }: Props) {
+export function KnowledgeFileCard({ file, retentionLevel }: Props) {
   const navigate = useNavigate()
 
   return (
@@ -22,44 +24,38 @@ export function KnowledgeFileCard({ file }: Props) {
       onClick={() =>
         navigate(`/knowledge/view?path=${encodeURIComponent(file.path)}`)
       }
-      className="w-full text-left rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-3 shadow-sm active:bg-gray-50 dark:active:bg-gray-800 transition-colors"
+      className="w-full text-left rounded border border-zinc-800 bg-zinc-900 p-3 active:bg-zinc-800 transition-colors"
     >
       <div className="flex items-start gap-2">
         <div className="flex-1 min-w-0">
-          <p className="text-sm font-medium text-gray-900 dark:text-gray-100 truncate">
-            {file.displayName}
-          </p>
-          <div className="flex items-center gap-2 mt-1 flex-wrap">
+          <div className="flex items-center justify-between gap-2 mb-1">
+            <p className="font-mono text-sm text-zinc-100 truncate">
+              {file.displayName}
+            </p>
+            {retentionLevel && <RetentionBadge level={retentionLevel} />}
+          </div>
+          <div className="flex items-center gap-2 flex-wrap">
             <span
-              className={`inline-block rounded-full px-2 py-0.5 text-[10px] font-medium ${CATEGORY_COLORS[file.category]}`}
+              className={`font-mono inline-block rounded border px-1.5 py-0.5 text-[10px] uppercase tracking-wider ${CATEGORY_COLORS[file.category]}`}
             >
               {KNOWLEDGE_CATEGORY_LABELS[file.category]}
             </span>
             {file.date && (
-              <>
-                <span className="inline-block rounded-full bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200 px-2 py-0.5 text-[10px] font-medium">
-                  日次生成
-                </span>
-                <span className="text-[11px] text-gray-500 dark:text-gray-400">
-                  {file.date}
-                </span>
-              </>
+              <span className="font-mono text-[11px] text-zinc-500">
+                {file.date}
+              </span>
             )}
           </div>
         </div>
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          className="h-4 w-4 text-gray-400 shrink-0 mt-0.5"
+          className="h-4 w-4 text-zinc-600 shrink-0 mt-0.5"
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
           strokeWidth={2}
         >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M9 5l7 7-7 7"
-          />
+          <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
         </svg>
       </div>
     </button>

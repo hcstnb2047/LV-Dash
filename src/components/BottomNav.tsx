@@ -1,10 +1,9 @@
 import { useLocation, useNavigate } from 'react-router-dom'
 
 const TABS = [
-  { path: '/', label: 'Actions', icon: '\u26A1' },
-  { path: '/knowledge', label: 'Knowledge', icon: '\uD83D\uDCDA' },
-  { path: '/books', label: '\u66F8\u7C4D', icon: '\uD83D\uDCD6' },
-  { path: '/settings', label: '\u8A2D\u5B9A', icon: '\u2699\uFE0F' },
+  { path: '/', label: 'Knowledge', icon: '◈' },
+  { path: '/flashcards', label: 'Flashcards', icon: '▣' },
+  { path: '/settings', label: 'Settings', icon: '⚙' },
 ] as const
 
 export function BottomNav() {
@@ -12,7 +11,7 @@ export function BottomNav() {
   const navigate = useNavigate()
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 border-t border-gray-200 dark:border-gray-800 bg-white/90 dark:bg-gray-900/90 backdrop-blur-sm pb-[env(safe-area-inset-bottom)]">
+    <nav className="fixed bottom-0 left-0 right-0 border-t border-zinc-800 bg-zinc-900/95 backdrop-blur-sm pb-[env(safe-area-inset-bottom)]">
       <div className="flex">
         {TABS.map((tab) => {
           const active = location.pathname === tab.path
@@ -20,19 +19,15 @@ export function BottomNav() {
             <button
               key={tab.path}
               onClick={() => navigate(tab.path)}
-              className={`relative flex-1 flex flex-col items-center py-2 text-xs font-medium transition-all ${
+              className={`flex-1 flex flex-col items-center py-2 font-mono text-[10px] uppercase tracking-widest transition-colors ${
                 active
-                  ? 'text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/30'
-                  : 'text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800/50'
+                  ? 'text-sky-400'
+                  : 'text-zinc-600 hover:text-zinc-400'
               }`}
             >
-              {active && (
-                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-12 h-1 bg-blue-600 dark:bg-blue-400 rounded-b-full" />
-              )}
-              <span className={`text-lg mb-0.5 transition-transform ${active ? 'scale-110' : ''}`}>
-                {tab.icon}
-              </span>
-              <span className={active ? 'font-bold' : ''}>{tab.label}</span>
+              <span className="text-base mb-0.5">{tab.icon}</span>
+              <span>{tab.label}</span>
+              {active && <div className="absolute top-0 w-12 h-px bg-sky-400" />}
             </button>
           )
         })}

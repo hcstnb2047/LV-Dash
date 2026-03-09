@@ -1,12 +1,9 @@
 import { encryptPAT, decryptPAT } from './crypto'
-import type { WorkflowRun } from '../types'
 
 const KEYS = {
   PAT: 'lv-dash-pat',
-  FAVORITES: 'lv-dash-favorites',
-  HIDDEN: 'lv-dash-hidden',
   THEME: 'lv-dash-theme',
-  STATUS_CACHE: 'lv-dash-status-cache',
+  SRS: 'lv-dash-srs',
 } as const
 
 export async function savePAT(pat: string): Promise<void> {
@@ -24,24 +21,6 @@ export function clearPAT(): void {
   localStorage.removeItem(KEYS.PAT)
 }
 
-export function loadFavorites(): Set<string> {
-  const stored = localStorage.getItem(KEYS.FAVORITES)
-  return new Set(stored ? JSON.parse(stored) : [])
-}
-
-export function saveFavorites(favs: Set<string>): void {
-  localStorage.setItem(KEYS.FAVORITES, JSON.stringify([...favs]))
-}
-
-export function loadHidden(): Set<string> {
-  const stored = localStorage.getItem(KEYS.HIDDEN)
-  return new Set(stored ? JSON.parse(stored) : [])
-}
-
-export function saveHidden(hidden: Set<string>): void {
-  localStorage.setItem(KEYS.HIDDEN, JSON.stringify([...hidden]))
-}
-
 export type Theme = 'system' | 'light' | 'dark'
 
 export function loadTheme(): Theme {
@@ -52,17 +31,36 @@ export function saveTheme(theme: Theme): void {
   localStorage.setItem(KEYS.THEME, theme)
 }
 
-interface StatusCache {
-  runs: Record<string, WorkflowRun[]>
-  updatedAt: string
+// SRS persistence (Task 6)
+import type { SRSStore, SRSData } from '../types/srs'
+
+export function loadSRSStore(): SRSStore {
+  const stored = localStorage.getItem(KEYS.SRS)
+  return stored ? JSON.parse(stored) : {}
 }
 
-export function loadStatusCache(): StatusCache | null {
-  const stored = localStorage.getItem(KEYS.STATUS_CACHE)
-  return stored ? JSON.parse(stored) : null
+export function saveSRSStore(store: SRSStore): void {
+  localStorage.setItem(KEYS.SRS, JSON.stringify(store))
 }
 
-export function saveStatusCache(runs: Record<string, WorkflowRun[]>): void {
-  const cache: StatusCache = { runs, updatedAt: new Date().toISOString() }
-  localStorage.setItem(KEYS.STATUS_CACHE, JSON.stringify(cache))
+export function exportSRSData(): string {
+  return localStorage.getItem(KEYS.SRS) ?? '{}'
+}
+
+export function importSRSData(json: string): void {
+  const parsed = JSON.parse(json) as Record<string, unknown>
+  for (const [key, value] of Object.entries(parsed)) {
+    const entry = value as Partial<SRSData>
+    if (
+      typeof entry.path !== 'string' ||
+      typeof entry.interval !== 'number' ||
+      typeof entry.repetitions !== 'number' ||
+      typeof entry.easeFactor !== 'number' ||
+      typeof entry.dueDate !== 'string' ||
+      typeof entry.lastReviewDate !== 'string'
+    ) {
+      throw new Error(`Invalid SRSData entry: ${key}`)
+    }
+  }
+  saveSRSStore(parsed as SRSStore)
 }
