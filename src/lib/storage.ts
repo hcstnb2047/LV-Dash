@@ -4,6 +4,8 @@ const KEYS = {
   PAT: 'lv-dash-pat',
   THEME: 'lv-dash-theme',
   SRS: 'lv-dash-srs',
+  FAVORITES: 'lv-dash-favorites',
+  NOTES: 'lv-dash-notes',
 } as const
 
 export async function savePAT(pat: string): Promise<void> {
@@ -63,4 +65,26 @@ export function importSRSData(json: string): void {
     }
   }
   saveSRSStore(parsed as SRSStore)
+}
+
+// Favorites persistence
+export function loadFavorites(): Set<string> {
+  const stored = localStorage.getItem(KEYS.FAVORITES)
+  return stored ? new Set(JSON.parse(stored) as string[]) : new Set()
+}
+
+export function saveFavorites(favorites: Set<string>): void {
+  localStorage.setItem(KEYS.FAVORITES, JSON.stringify([...favorites]))
+}
+
+// Notes persistence
+export type NotesStore = Record<string, string>
+
+export function loadNotes(): NotesStore {
+  const stored = localStorage.getItem(KEYS.NOTES)
+  return stored ? JSON.parse(stored) : {}
+}
+
+export function saveNotes(notes: NotesStore): void {
+  localStorage.setItem(KEYS.NOTES, JSON.stringify(notes))
 }

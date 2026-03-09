@@ -7,6 +7,7 @@ export function useKnowledgeSearch(pat: string | null) {
   const [results, setResults] = useState<KnowledgeSearchResult[]>([])
   const [searching, setSearching] = useState(false)
   const [rateLimited, setRateLimited] = useState(false)
+  const [searchError, setSearchError] = useState<string | null>(null)
   const timerRef = useRef<number>(undefined)
   const rateLimitTimerRef = useRef<number>(undefined)
 
@@ -14,10 +15,16 @@ export function useKnowledgeSearch(pat: string | null) {
     async (q: string) => {
       if (!pat || q.length < 2) return
       setSearching(true)
+      setSearchError(null)
       try {
-        const { results: items, rateLimitRemaining } =
+        const { results: items, rateLimitRemaining, error } =
           await searchKnowledge(pat, q)
-        setResults(items)
+        if (error) {
+          setSearchError(error)
+          setResults([])
+        } else {
+          setResults(items)
+        }
         if (rateLimitRemaining < 3) {
           setRateLimited(true)
           rateLimitTimerRef.current = window.setTimeout(
@@ -26,6 +33,7 @@ export function useKnowledgeSearch(pat: string | null) {
           )
         }
       } catch {
+        setSearchError('検索に失敗しました')
         setResults([])
       } finally {
         setSearching(false)
@@ -56,7 +64,8 @@ export function useKnowledgeSearch(pat: string | null) {
   const clearSearch = useCallback(() => {
     setQuery('')
     setResults([])
+    setSearchError(null)
   }, [])
 
-  return { query, setQuery, results, searching, rateLimited, clearSearch }
+  return { query, setQuery, results, searching, rateLimited, searchError, clearSearch }
 }

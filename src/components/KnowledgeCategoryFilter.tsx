@@ -3,10 +3,11 @@ import {
   type KnowledgeCategory,
 } from '../types/knowledge'
 
-type FilterKey = KnowledgeCategory | 'all'
+type FilterKey = KnowledgeCategory | 'all' | 'favorites'
 
 const FILTERS: { key: FilterKey; label: string }[] = [
   { key: 'all', label: KNOWLEDGE_CATEGORY_LABELS.all },
+  { key: 'favorites', label: '★' },
   { key: 'report', label: KNOWLEDGE_CATEGORY_LABELS.report },
   { key: 'note', label: KNOWLEDGE_CATEGORY_LABELS.note },
   { key: 'topic', label: KNOWLEDGE_CATEGORY_LABELS.topic },

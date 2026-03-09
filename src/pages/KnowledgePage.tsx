@@ -4,6 +4,8 @@ import { useApp } from '../context/AppContext'
 import { useKnowledge } from '../hooks/useKnowledge'
 import { useKnowledgeSearch } from '../hooks/useKnowledgeSearch'
 import { useSRS } from '../hooks/useSRS'
+import { useFavorites } from '../hooks/useFavorites'
+import { useNotes } from '../hooks/useNotes'
 import { isDue } from '../lib/srs'
 import {
   KnowledgeCategoryFilter,
@@ -52,9 +54,11 @@ const RETENTION_ORDER = { due: 0, learning: 1, young: 2, mature: 3, new: 4 }
 export function KnowledgePage() {
   const { pat, addToast } = useApp()
   const { files, loading, error, refresh } = useKnowledge(pat)
-  const { query, setQuery, results, searching, rateLimited, clearSearch } =
+  const { query, setQuery, results, searching, rateLimited, searchError, clearSearch } =
     useKnowledgeSearch(pat)
   const { dueTodayCount, getLevel, store } = useSRS()
+  const { isFavorited, toggle: toggleFavorite } = useFavorites()
+  const { hasNote } = useNotes()
   const navigate = useNavigate()
   const [filter, setFilter] = useState<KnowledgeFilterKey>('all')
   const [showSearch, setShowSearch] = useState(false)
@@ -69,7 +73,10 @@ export function KnowledgePage() {
 
   const isSearching = query.length >= 2
   const filteredFiles = files
-    .filter((f) => filter === 'all' || f.category === filter)
+    .filter((f) => {
+      if (filter === 'favorites') return isFavorited(f.path)
+      return filter === 'all' || f.category === filter
+    })
     .sort((a, b) => {
       switch (sortKey) {
         case 'date-desc':
@@ -198,6 +205,10 @@ export function KnowledgePage() {
             <div className="flex justify-center py-12">
               <div className="h-6 w-6 animate-spin rounded-full border-2 border-sky-400 border-t-transparent" />
             </div>
+          ) : searchError ? (
+            <p className="font-mono text-center text-sm text-red-400 py-12">
+              {searchError}
+            </p>
           ) : results.length === 0 ? (
             <p className="font-mono text-center text-sm text-zinc-500 py-12">
               検索結果なし
@@ -215,6 +226,9 @@ export function KnowledgePage() {
               key={f.path}
               file={f}
               retentionLevel={getLevel(f.path)}
+              isFavorited={isFavorited(f.path)}
+              hasNote={hasNote(f.path)}
+              onToggleFavorite={toggleFavorite}
             />
           ))
         )}

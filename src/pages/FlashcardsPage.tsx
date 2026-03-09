@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback } from 'react'
+import { useState, useRef, useCallback, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useApp } from '../context/AppContext'
 import { useKnowledge } from '../hooks/useKnowledge'
@@ -95,11 +95,19 @@ type Phase = 'front' | 'back'
 
 export function FlashcardsPage() {
   const { pat } = useApp()
-  const { files } = useKnowledge(pat)
+  const { files, loading: filesLoading } = useKnowledge(pat)
   const { buildCards, recordReview } = useSRS()
   const navigate = useNavigate()
 
-  const [cards] = useState<FlashCard[]>(() => buildCards(files))
+  const [cards, setCards] = useState<FlashCard[]>([])
+  const [sessionReady, setSessionReady] = useState(false)
+
+  useEffect(() => {
+    if (!filesLoading && !sessionReady) {
+      setCards(buildCards(files))
+      setSessionReady(true)
+    }
+  }, [files, filesLoading, sessionReady, buildCards])
   const [currentIndex, setCurrentIndex] = useState(0)
   const [phase, setPhase] = useState<Phase>('front')
   const [content, setContent] = useState<string | null>(null)
@@ -187,6 +195,14 @@ export function FlashcardsPage() {
   }
 
   if (!pat) return null
+
+  if (!sessionReady) {
+    return (
+      <div className="flex-1 flex items-center justify-center bg-zinc-950">
+        <div className="h-6 w-6 animate-spin rounded-full border-2 border-sky-400 border-t-transparent" />
+      </div>
+    )
+  }
 
   if (summary) {
     return (

@@ -85,7 +85,7 @@ export async function getFileContent(
 export async function searchKnowledge(
   pat: string,
   query: string,
-): Promise<{ results: KnowledgeSearchResult[]; rateLimitRemaining: number }> {
+): Promise<{ results: KnowledgeSearchResult[]; rateLimitRemaining: number; error?: string }> {
   const q = encodeURIComponent(`${query} repo:${OWNER}/${REPO} path:Knowledge extension:md`)
   const res = await fetch(`${BASE}/search/code?q=${q}`, {
     headers: {
@@ -102,7 +102,14 @@ export async function searchKnowledge(
 
   if (!res.ok) {
     if (res.status === 403) {
-      return { results: [], rateLimitRemaining: 0 }
+      const isRateLimit = res.headers.get('X-RateLimit-Remaining') === '0'
+      const error = isRateLimit
+        ? 'レート制限中です。しばらく待ってから再試行してください'
+        : '検索権限がありません。PATに repo スコープが必要です'
+      return { results: [], rateLimitRemaining: 0, error }
+    }
+    if (res.status === 422) {
+      return { results: [], rateLimitRemaining, error: '検索クエリが無効です' }
     }
     throw new Error(`Search API error: ${res.status}`)
   }
