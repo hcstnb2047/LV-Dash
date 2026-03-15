@@ -33,7 +33,7 @@ function saveCache(files: KnowledgeFile[]) {
 
 export function useKnowledge(pat: string | null) {
   const [files, setFiles] = useState<KnowledgeFile[]>([])
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(!!pat)
   const [error, setError] = useState<string | null>(null)
 
   const fetchTree = useCallback(
