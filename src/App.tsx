@@ -1,4 +1,4 @@
-import { HashRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { HashRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom'
 import { AppProvider, useApp } from './context/AppContext'
 import { BottomNav } from './components/BottomNav'
 import { ToastContainer } from './components/Toast'
@@ -10,6 +10,8 @@ import { FlashcardsPage } from './pages/FlashcardsPage'
 
 function AppRoutes() {
   const { pat, patLoading } = useApp()
+  const location = useLocation()
+  const hideNav = location.pathname === '/knowledge/view'
 
   if (patLoading) {
     return (
@@ -28,7 +30,7 @@ function AppRoutes() {
         <Route path="/settings" element={<SettingsPage />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
-      {pat && <BottomNav />}
+      {pat && !hideNav && <BottomNav />}
     </>
   )
 }

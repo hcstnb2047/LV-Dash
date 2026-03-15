@@ -122,7 +122,7 @@ export function KnowledgeViewPage() {
         </div>
       </header>
 
-      <div className="flex-1 overflow-y-auto p-4 pb-8">
+      <div className="flex-1 overflow-y-auto p-4 pb-48">
         {loading ? (
           <div className="flex justify-center py-12">
             <div className="h-8 w-8 animate-spin rounded-full border-2 border-sky-400 border-t-transparent" />
@@ -134,33 +134,33 @@ export function KnowledgeViewPage() {
             コンテンツを読み込めませんでした
           </p>
         )}
+      </div>
 
-        {/* Memo section */}
-        <div className="mt-8 border-t border-zinc-800 pt-6">
-          <p className="font-mono text-xs text-zinc-500 uppercase tracking-widest mb-2">Memo</p>
-          <textarea
-            value={noteText}
-            onChange={(e) => setNoteText(e.target.value)}
-            placeholder="メモを入力..."
-            rows={4}
-            className="w-full rounded border border-zinc-700 bg-zinc-900 px-3 py-2 font-mono text-sm text-zinc-200 placeholder-zinc-600 focus:border-sky-500 focus:outline-none resize-none"
-          />
-          <div className="flex gap-2 mt-2">
+      {/* Memo — fixed bottom panel */}
+      <div className="fixed bottom-0 left-0 right-0 border-t border-zinc-800 bg-zinc-950 px-4 pt-3 pb-4">
+        <p className="font-mono text-xs text-zinc-500 uppercase tracking-widest mb-2">Memo</p>
+        <textarea
+          value={noteText}
+          onChange={(e) => setNoteText(e.target.value)}
+          placeholder="メモを入力..."
+          rows={3}
+          className="w-full rounded border border-zinc-700 bg-zinc-900 px-3 py-2 font-mono text-sm text-zinc-200 placeholder-zinc-600 focus:border-sky-500 focus:outline-none resize-none"
+        />
+        <div className="flex gap-2 mt-2">
+          <button
+            onClick={handleSaveNote}
+            className="font-mono rounded border border-sky-600 text-sky-400 px-4 py-1.5 text-xs uppercase tracking-wider hover:bg-sky-600 hover:text-zinc-950 transition-colors"
+          >
+            {noteSaved ? 'Saved!' : 'Save'}
+          </button>
+          {noteText && (
             <button
-              onClick={handleSaveNote}
-              className="font-mono rounded border border-sky-600 text-sky-400 px-4 py-1.5 text-xs uppercase tracking-wider hover:bg-sky-600 hover:text-zinc-950 transition-colors"
+              onClick={() => { setNoteText(''); saveNote(path, '') }}
+              className="font-mono rounded border border-zinc-700 text-zinc-500 px-4 py-1.5 text-xs uppercase tracking-wider hover:border-zinc-500 hover:text-zinc-300 transition-colors"
             >
-              {noteSaved ? 'Saved!' : 'Save'}
+              Clear
             </button>
-            {noteText && (
-              <button
-                onClick={() => { setNoteText(''); saveNote(path, '') }}
-                className="font-mono rounded border border-zinc-700 text-zinc-500 px-4 py-1.5 text-xs uppercase tracking-wider hover:border-zinc-500 hover:text-zinc-300 transition-colors"
-              >
-                Clear
-              </button>
-            )}
-          </div>
+          )}
         </div>
       </div>
     </div>
