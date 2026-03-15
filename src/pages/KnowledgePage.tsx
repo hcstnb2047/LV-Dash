@@ -3,9 +3,6 @@ import { useNavigate } from 'react-router-dom'
 import { useApp } from '../context/AppContext'
 import { useKnowledge } from '../hooks/useKnowledge'
 import { useKnowledgeSearch } from '../hooks/useKnowledgeSearch'
-import { useSRS } from '../hooks/useSRS'
-import { useFavorites } from '../hooks/useFavorites'
-import { useNotes } from '../hooks/useNotes'
 import { isDue } from '../lib/srs'
 import {
   KnowledgeCategoryFilter,
@@ -52,13 +49,10 @@ const SORT_OPTIONS: { key: SortKey; label: string }[] = [
 const RETENTION_ORDER = { due: 0, learning: 1, young: 2, mature: 3, new: 4 }
 
 export function KnowledgePage() {
-  const { pat, addToast } = useApp()
+  const { pat, addToast, dueTodayCount, getSRSLevel, srsStore, isFavorited, toggleFavorite, hasNote } = useApp()
   const { files, loading, error, refresh } = useKnowledge(pat)
   const { query, setQuery, results, searching, rateLimited, searchError, clearSearch } =
     useKnowledgeSearch(pat)
-  const { dueTodayCount, getLevel, store } = useSRS()
-  const { isFavorited, toggle: toggleFavorite } = useFavorites()
-  const { hasNote } = useNotes()
   const navigate = useNavigate()
   const [filter, setFilter] = useState<KnowledgeFilterKey>('all')
   const [showSearch, setShowSearch] = useState(false)
@@ -94,10 +88,10 @@ export function KnowledgePage() {
         case 'name-desc':
           return b.displayName.localeCompare(a.displayName)
         case 'retention': {
-          const srsA = store[a.path] ?? null
-          const srsB = store[b.path] ?? null
-          const levelA = isDue(srsA) ? 'due' : getLevel(a.path)
-          const levelB = isDue(srsB) ? 'due' : getLevel(b.path)
+          const srsA = srsStore[a.path] ?? null
+          const srsB = srsStore[b.path] ?? null
+          const levelA = isDue(srsA) ? 'due' : getSRSLevel(a.path)
+          const levelB = isDue(srsB) ? 'due' : getSRSLevel(b.path)
           return (RETENTION_ORDER[levelA] ?? 9) - (RETENTION_ORDER[levelB] ?? 9)
         }
         default:
@@ -225,7 +219,7 @@ export function KnowledgePage() {
             <KnowledgeFileCard
               key={f.path}
               file={f}
-              retentionLevel={getLevel(f.path)}
+              retentionLevel={getSRSLevel(f.path)}
               isFavorited={isFavorited(f.path)}
               hasNote={hasNote(f.path)}
               onToggleFavorite={toggleFavorite}

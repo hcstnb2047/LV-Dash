@@ -2,7 +2,6 @@ import { useState, useRef, useCallback, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useApp } from '../context/AppContext'
 import { useKnowledge } from '../hooks/useKnowledge'
-import { useSRS } from '../hooks/useSRS'
 import { getFileContent } from '../lib/knowledge'
 import { MarkdownContent } from '../components/MarkdownContent'
 import type { FlashCard, SRSRating, SessionSummary } from '../types/srs'
@@ -94,9 +93,8 @@ function SessionSummaryView({ summary }: { summary: SessionSummary }) {
 type Phase = 'front' | 'back'
 
 export function FlashcardsPage() {
-  const { pat } = useApp()
+  const { pat, buildCards, recordReview } = useApp()
   const { files, loading: filesLoading } = useKnowledge(pat)
-  const { buildCards, recordReview } = useSRS()
   const navigate = useNavigate()
 
   const [cards, setCards] = useState<FlashCard[]>([])

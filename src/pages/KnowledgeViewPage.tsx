@@ -4,8 +4,6 @@ import { useApp } from '../context/AppContext'
 import { getFileContent } from '../lib/knowledge'
 import { MarkdownContent } from '../components/MarkdownContent'
 import { OWNER, DATA_REPO } from '../lib/github'
-import { useFavorites } from '../hooks/useFavorites'
-import { useNotes } from '../hooks/useNotes'
 
 // Simple in-memory content cache (survives SPA navigation)
 const contentCache = new Map<string, string>()
@@ -28,13 +26,10 @@ function getDisplayTitle(path: string): string {
 }
 
 export function KnowledgeViewPage() {
-  const { pat, addToast } = useApp()
+  const { pat, addToast, isFavorited, toggleFavorite, getNote, saveNote } = useApp()
   const [searchParams] = useSearchParams()
   const navigate = useNavigate()
   const path = searchParams.get('path') ?? ''
-
-  const { isFavorited, toggle: toggleFavorite } = useFavorites()
-  const { getNote, saveNote } = useNotes()
 
   const [content, setContent] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
